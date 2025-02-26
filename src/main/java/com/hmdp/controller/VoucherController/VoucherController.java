@@ -1,4 +1,4 @@
-package com.hmdp.controller;
+package com.hmdp.controller.VoucherController;
 
 
 import com.hmdp.dto.Result;

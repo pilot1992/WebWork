@@ -1,4 +1,4 @@
-package com.hmdp.controller;
+package com.hmdp.controller.BlogController;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-12-22
  */
 @RestController
-@RequestMapping("/follow")
-public class FollowController {
+@RequestMapping("/blog-comments")
+public class BlogCommentsController {
 
 }
