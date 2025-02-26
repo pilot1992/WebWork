@@ -71,6 +71,26 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
 
     /**
+     * 更新店铺数据
+     * @param shop
+     * @return
+     */
+    @Override
+    @Transactional
+    public Result update(Shop shop) {
+        Long id = shop.getId();
+        if (id == null) {
+            return Result.fail("店铺id不能为空");
+        }
+        //先更新数据库
+        updateById(shop);
+        //再删除缓存
+        stringRedisTemplate.delete(RedisConstants.CACHE_SHOP_KEY + id);
+        return Result.ok();
+    }
+
+
+    /**
      * 通过互斥锁解决缓存击穿
      * @param id
      * @return
@@ -130,19 +150,19 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
      * @param key
      * @return
      */
-    private Boolean tryLock(String key){
+    /*private Boolean tryLock(String key){
         Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(key, "1", RedisConstants.LOCK_SHOP_TTL, TimeUnit.SECONDS);
         return BooleanUtil.isTrue(flag);
-    }
+    }*/
 
 
     /**
      * 释放互斥锁
      * @param key
      */
-    private void unlock(String key){
+    /*private void unlock(String key){
         stringRedisTemplate.delete(key);
-    }
+    }*/
 
 
     /**
@@ -197,7 +217,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
      * @param id
      * @param expireTime
      */
-    private void savaShopToRedis(Long id, Long expireTime) {
+    /*private void savaShopToRedis(Long id, Long expireTime) {
         //查询店铺数据
         Shop shop = getById(id);
 
@@ -209,7 +229,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         //写入redis
         stringRedisTemplate.opsForValue().set(RedisConstants.CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(redisData));
     }
-
+*/
     /**
      * 解决缓存穿透
      * @param id
@@ -247,18 +267,4 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         //6.返回
         return shop;
     }*/
-
-    @Override
-    @Transactional
-    public Result update(Shop shop) {
-        Long id = shop.getId();
-        if (id == null) {
-            return Result.fail("店铺id不能为空");
-        }
-        //先更新数据库
-        updateById(shop);
-        //再删除缓存
-        stringRedisTemplate.delete(RedisConstants.CACHE_SHOP_KEY + id);
-        return Result.ok();
-    }
 }

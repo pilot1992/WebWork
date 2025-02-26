@@ -48,7 +48,7 @@ public class CacheClient {
 
 
     /**
-     * 解决缓存击穿
+     * 解决缓存穿透
      * @param keyPrefix
      * @param id
      * @param type
