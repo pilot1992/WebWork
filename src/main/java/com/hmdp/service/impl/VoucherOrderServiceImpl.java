@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -242,7 +243,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
 
         // 返回订单id
-        return Result.ok(orderId);
+        return Result.ok(Optional.of(orderId));
 
 
         /**
@@ -339,7 +340,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         boolean success = seckillVoucherService.update()
                 .setSql("stock = stock - 1")
                 .eq("voucher_id", voucherOrder.getVoucherId())
-                .gt("stock", 0)
+                .gt("stock", Optional.of(0))
                 .update();
         if(!success){
             log.error("库存不足");
